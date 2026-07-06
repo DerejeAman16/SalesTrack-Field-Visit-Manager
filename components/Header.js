@@ -1,8 +1,18 @@
 "use client";
 
-import { BarChart3, MapPin } from "lucide-react";
+import { BarChart3, MapPin, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+    const { user, logout } = useAuth();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        logout();
+        router.push("/login");
+    };
+
     return (
         <header
             style={{
@@ -32,24 +42,24 @@ export default function Header() {
                 </div>
 
                 {/* Right side badge */}
-                <div className="flex items-center gap-2">
-                    <div
-                        className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium"
-                        style={{ background: "#1e3a5f", color: "#60a5fa" }}
-                    >
-                        <BarChart3 size={14} />
-                        Admin Dashboard
-                    </div>
-                    <div
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
-                        style={{ background: "#14532d22", border: "1px solid #16a34a55", color: "#4ade80" }}
-                    >
-                        <span
-                            className="w-1.5 h-1.5 rounded-full animate-pulse"
-                            style={{ background: "#4ade80" }}
-                        />
-                        Live
-                    </div>
+                <div className="flex items-center gap-4">
+                    {user && (
+                        <div className="flex items-center gap-3">
+                            <div className="hidden sm:flex flex-col items-end">
+                                <span className="text-sm font-semibold text-white leading-tight">{user.name}</span>
+                                <span className="text-xs font-medium" style={{ color: user.role === "admin" ? "#60a5fa" : "#4ade80" }}>
+                                    {user.role === "admin" ? "Administrator" : "Sales Agent"}
+                                </span>
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="w-9 h-9 rounded-xl flex items-center justify-center text-red-400 hover:bg-red-900/30 transition-colors border border-red-500/20"
+                                title="Sign Out"
+                            >
+                                <LogOut size={16} />
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>

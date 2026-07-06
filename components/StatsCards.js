@@ -54,14 +54,25 @@ function KpiCard({ icon: Icon, label, value, sub, color, gradient }) {
 
 export default function StatsCards({ visits }) {
     const totalVisits = visits.length;
-    const totalArea = visits.reduce((sum, v) => sum + v.houseSize, 0);
+    let totalWindowArea = 0;
+
+    visits.forEach(v => {
+        if (v.rooms) {
+            v.rooms.forEach(r => {
+                const width = parseFloat(r.width) || 0;
+                const height = parseFloat(r.height) || 0;
+                totalWindowArea += (width * height);
+            });
+        }
+    });
 
     // Find top performer
     const counts = {};
     visits.forEach((v) => {
         counts[v.salesperson] = (counts[v.salesperson] || 0) + 1;
     });
-    const topPerson = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const topPerson = sorted.length > 0 ? sorted[0] : null;
 
     return (
         <section>
@@ -82,9 +93,9 @@ export default function StatsCards({ visits }) {
                 />
                 <KpiCard
                     icon={AreaChart}
-                    label="Total Area Visited"
-                    value={`${totalArea.toLocaleString()} m²`}
-                    sub="Cumulative house area"
+                    label="Total Window Area"
+                    value={`${totalWindowArea.toFixed(1)} m²`}
+                    sub="Cumulative measurement"
                     color="#10b981"
                     gradient="linear-gradient(135deg, #10b981, #059669)"
                 />

@@ -1,4 +1,5 @@
 import "./globals.css";
+import { AuthProvider } from "@/lib/auth";
 
 export const metadata = {
     title: "Field Sales Visit Tracker",
@@ -16,7 +17,9 @@ export default function RootLayout({ children }) {
                     rel="stylesheet"
                 />
             </head>
-            <body className="antialiased">{children}</body>
+            <body className="antialiased">
+                <AuthProvider>{children}</AuthProvider>
+            </body>
         </html>
     );
 }

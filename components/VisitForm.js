@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, User, Home, UserCheck, CheckCircle2, Loader2, Navigation } from "lucide-react";
-import { SALESPEOPLE } from "@/lib/mockData";
+import { MapPin, UserCheck, CheckCircle2, Loader2, Navigation, Phone, Home } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import RoomMeasurements from "./agent/RoomMeasurements";
 
 const MOCK_LOCATIONS = [
     { lat: "9.0054", lng: "38.7636", address: "Bole Road, Friendship Area, Addis Ababa" },
@@ -23,14 +24,15 @@ const inputStyle = {
 };
 
 export default function VisitForm({ onSubmit }) {
+    const { user } = useAuth();
     const [form, setForm] = useState({
-        salesperson: "",
         address: "",
         latitude: "",
         longitude: "",
         clientManager: "",
-        houseSize: "",
+        clientPhone: "",
     });
+    const [rooms, setRooms] = useState([]);
     const [locating, setLocating] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [errors, setErrors] = useState({});
@@ -58,11 +60,17 @@ export default function VisitForm({ onSubmit }) {
 
     const validate = () => {
         const e = {};
-        if (!form.salesperson) e.salesperson = "Required";
         if (!form.address) e.address = "Required";
         if (!form.latitude) e.latitude = "Capture location first";
         if (!form.clientManager) e.clientManager = "Required";
-        if (!form.houseSize || Number(form.houseSize) <= 0) e.houseSize = "Enter a valid size";
+        if (!form.clientPhone) e.clientPhone = "Required";
+
+        let roomsError = false;
+        rooms.forEach((r) => {
+            if (!r.roomName || !r.width || !r.height) roomsError = true;
+        });
+        if (roomsError) e.rooms = "Fill all room fields";
+
         return e;
     };
 
@@ -77,17 +85,19 @@ export default function VisitForm({ onSubmit }) {
         onSubmit({
             id: `v-${Date.now()}`,
             timestamp: new Date().toISOString(),
-            salesperson: form.salesperson,
+            salesperson: user ? user.name : "Unknown Salesperson",
             address: form.address,
             latitude: form.latitude,
             longitude: form.longitude,
             clientManager: form.clientManager,
-            houseSize: Number(form.houseSize),
+            clientPhone: form.clientPhone,
+            rooms: rooms.map(r => ({ roomName: r.roomName, width: Number(r.width), height: Number(r.height) })),
         });
 
         setSubmitted(true);
         setTimeout(() => {
-            setForm({ salesperson: "", address: "", latitude: "", longitude: "", clientManager: "", houseSize: "" });
+            setForm({ address: "", latitude: "", longitude: "", clientManager: "", clientPhone: "" });
+            setRooms([]);
             setErrors({});
             setSubmitted(false);
         }, 2500);
@@ -128,37 +138,11 @@ export default function VisitForm({ onSubmit }) {
                         Visit Logged Successfully!
                     </p>
                     <p className="text-sm" style={{ color: "#94a3b8" }}>
-                        Statistics and table updated.
+                        Data has been pushed to the dashboard.
                     </p>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Salesperson */}
-                    <div>
-                        <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
-                            <User size={12} /> Salesperson Name
-                        </label>
-                        <select
-                            name="salesperson"
-                            value={form.salesperson}
-                            onChange={handleChange}
-                            className={inputClass}
-                            style={{ ...inputStyle, appearance: "none" }}
-                        >
-                            <option value="">— Select salesperson —</option>
-                            {SALESPEOPLE.map((s) => (
-                                <option key={s} value={s}>
-                                    {s}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.salesperson && (
-                            <p className="text-xs mt-1" style={{ color: "#f87171" }}>
-                                {errors.salesperson}
-                            </p>
-                        )}
-                    </div>
-
+                <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Pin Location */}
                     <div>
                         <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
@@ -218,7 +202,7 @@ export default function VisitForm({ onSubmit }) {
                         )}
                     </div>
 
-                    {/* Grid: Client Manager + House Size */}
+                    {/* Client Information */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
@@ -240,24 +224,33 @@ export default function VisitForm({ onSubmit }) {
                         </div>
                         <div>
                             <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
-                                <Home size={12} /> House Size (m² / care)
+                                <Phone size={12} /> Phone Number
                             </label>
                             <input
-                                name="houseSize"
-                                type="number"
-                                min="1"
-                                value={form.houseSize}
+                                name="clientPhone"
+                                type="tel"
+                                value={form.clientPhone}
                                 onChange={handleChange}
-                                placeholder="e.g. 250"
+                                placeholder="e.g. 0911223344"
                                 className={inputClass}
                                 style={inputStyle}
                             />
-                            {errors.houseSize && (
+                            {errors.clientPhone && (
                                 <p className="text-xs mt-1" style={{ color: "#f87171" }}>
-                                    {errors.houseSize}
+                                    {errors.clientPhone}
                                 </p>
                             )}
                         </div>
+                    </div>
+
+                    {/* Dynamic Room Measurements */}
+                    <div className="pt-2 border-t border-[#1e293b]">
+                        <RoomMeasurements rooms={rooms} setRooms={setRooms} />
+                        {errors.rooms && (
+                            <p className="text-xs mt-2" style={{ color: "#f87171" }}>
+                                {errors.rooms}
+                            </p>
+                        )}
                     </div>
 
                     {/* Submit */}

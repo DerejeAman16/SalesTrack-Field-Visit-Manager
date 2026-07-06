@@ -1,6 +1,7 @@
 "use client";
 
-import { MapPin, Clock, User, Home, UserCheck, TableProperties } from "lucide-react";
+import { MapPin, Clock, UserCheck, TableProperties, Phone, Navigation } from "lucide-react";
+import { useState } from "react";
 
 function formatDate(iso) {
     const d = new Date(iso);
@@ -16,7 +17,7 @@ function formatDate(iso) {
 function Badge({ children, color }) {
     return (
         <span
-            className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+            className="inline-flex items-center justify-center px-1.5 py-0.5 rounded text-[10px] font-medium tracking-wide flex-shrink-0"
             style={{ background: `${color}22`, color, border: `1px solid ${color}44` }}
         >
             {children}
@@ -37,6 +38,8 @@ function getColor(name) {
 }
 
 export default function VisitsTable({ visits }) {
+    const [expandedRow, setExpandedRow] = useState(null);
+
     return (
         <section>
             <div className="flex items-center justify-between mb-4">
@@ -46,7 +49,12 @@ export default function VisitsTable({ visits }) {
                         Visit Logs
                     </h2>
                 </div>
-                <Badge color="#6366f1">{visits.length} records</Badge>
+                <div
+                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                    style={{ background: `#6366f122`, color: "#6366f1", border: `1px solid #6366f144` }}
+                >
+                    {visits.length} records
+                </div>
             </div>
 
             {/* Desktop Table */}
@@ -62,11 +70,10 @@ export default function VisitsTable({ visits }) {
                     <table className="w-full text-sm">
                         <thead>
                             <tr style={{ borderBottom: "1px solid #1e293b" }}>
-                                {["Timestamp", "Salesperson", "Location", "Client Manager", "House Size"].map((h) => (
+                                {["Timestamp", "Salesperson", "Location", "Client Manager", "Rooms"].map((h) => (
                                     <th
                                         key={h}
-                                        className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider"
-                                        style={{ color: "#475569", background: "#0f172a" }}
+                                        className="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-[#0f172a]"
                                     >
                                         {h}
                                     </th>
@@ -76,26 +83,26 @@ export default function VisitsTable({ visits }) {
                         <tbody>
                             {[...visits].reverse().map((v, i) => {
                                 const color = getColor(v.salesperson);
+                                const totalArea = v.rooms?.reduce((acc, r) => acc + (parseFloat(r.width) * parseFloat(r.height)), 0) || 0;
+                                const isExpanded = expandedRow === v.id;
+
                                 return (
                                     <tr
                                         key={v.id}
-                                        className="transition-colors duration-150"
+                                        className="transition-colors duration-150 cursor-pointer group"
+                                        onClick={() => setExpandedRow(isExpanded ? null : v.id)}
                                         style={{
                                             borderBottom: "1px solid #1e293b",
-                                            background: i % 2 === 0 ? "transparent" : "#0a1628",
+                                            background: isExpanded ? "#1e293b" : i % 2 === 0 ? "transparent" : "#0a1628",
                                         }}
-                                        onMouseEnter={(e) => (e.currentTarget.style.background = "#1e293b")}
-                                        onMouseLeave={(e) =>
-                                            (e.currentTarget.style.background = i % 2 === 0 ? "transparent" : "#0a1628")
-                                        }
                                     >
-                                        <td className="px-5 py-3.5 whitespace-nowrap">
-                                            <div className="flex items-center gap-1.5 text-xs" style={{ color: "#64748b" }}>
+                                        <td className="px-5 py-4 whitespace-nowrap align-top">
+                                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
                                                 <Clock size={12} />
                                                 {formatDate(v.timestamp)}
                                             </div>
                                         </td>
-                                        <td className="px-5 py-3.5">
+                                        <td className="px-5 py-4 align-top">
                                             <div className="flex items-center gap-2">
                                                 <div
                                                     className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
@@ -106,21 +113,50 @@ export default function VisitsTable({ visits }) {
                                                 <span className="font-medium text-white text-xs">{v.salesperson}</span>
                                             </div>
                                         </td>
-                                        <td className="px-5 py-3.5">
+                                        <td className="px-5 py-4 align-top">
                                             <div className="max-w-[200px]">
                                                 <p className="text-xs text-white leading-snug truncate">{v.address}</p>
-                                                <p className="text-xs font-mono mt-0.5" style={{ color: "#4ade80" }}>
+                                                <p className="text-[10px] font-mono mt-1 text-green-400">
                                                     {v.latitude}, {v.longitude}
                                                 </p>
                                             </div>
                                         </td>
-                                        <td className="px-5 py-3.5">
-                                            <span className="text-xs" style={{ color: "#cbd5e1" }}>
+                                        <td className="px-5 py-4 align-top">
+                                            <div className="text-xs text-slate-300 font-medium">
                                                 {v.clientManager}
-                                            </span>
+                                            </div>
+                                            {(v.clientPhone || v.clientPhone === "") && (
+                                                <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-500">
+                                                    <Phone size={10} />
+                                                    {v.clientPhone || "No Phone"}
+                                                </div>
+                                            )}
                                         </td>
-                                        <td className="px-5 py-3.5">
-                                            <Badge color="#10b981">{v.houseSize} m²</Badge>
+                                        <td className="px-5 py-4 align-top">
+                                            {!v.rooms || v.rooms.length === 0 ? (
+                                                <span className="text-xs text-slate-500">No rooms</span>
+                                            ) : (
+                                                <div className="space-y-1.5">
+                                                    <div className="flex items-center gap-2">
+                                                        <Badge color="#10b981">{totalArea.toFixed(1)} m²</Badge>
+                                                        <span className="text-[10px] text-slate-400">{v.rooms.length} room(s)</span>
+                                                    </div>
+
+                                                    {isExpanded && (
+                                                        <div className="mt-3 space-y-1 text-xs">
+                                                            {v.rooms.map((r, rIdx) => {
+                                                                const area = parseFloat(r.width) * parseFloat(r.height);
+                                                                return (
+                                                                    <div key={rIdx} className="flex items-center justify-between py-1 border-t border-slate-700/50">
+                                                                        <span className="text-slate-300">{r.roomName}</span>
+                                                                        <span className="font-mono text-slate-400 text-[10px]">{r.width} × {r.height} &nbsp;<span className="text-indigo-400">({area.toFixed(1)}m²)</span></span>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
                                         </td>
                                     </tr>
                                 );
@@ -134,6 +170,8 @@ export default function VisitsTable({ visits }) {
             <div className="md:hidden space-y-3">
                 {[...visits].reverse().map((v) => {
                     const color = getColor(v.salesperson);
+                    const totalArea = v.rooms?.reduce((acc, r) => acc + (parseFloat(r.width) * parseFloat(r.height)), 0) || 0;
+
                     return (
                         <div
                             key={v.id}
@@ -154,30 +192,51 @@ export default function VisitsTable({ visits }) {
                                     </div>
                                     <span className="text-sm font-semibold text-white">{v.salesperson}</span>
                                 </div>
-                                <Badge color="#10b981">{v.houseSize} m²</Badge>
+                                <div className="flex flex-col items-end gap-1">
+                                    <span className="text-[10px] text-slate-400">{formatDate(v.timestamp)}</span>
+                                    <Badge color="#10b981">{totalArea.toFixed(1)} m²</Badge>
+                                </div>
                             </div>
 
                             {/* Details */}
-                            <div className="space-y-1.5 text-xs" style={{ color: "#94a3b8" }}>
+                            <div className="space-y-2 text-xs" style={{ color: "#94a3b8" }}>
                                 <div className="flex items-start gap-1.5">
                                     <MapPin size={12} className="mt-0.5 flex-shrink-0" style={{ color: "#6366f1" }} />
                                     <span>{v.address}</span>
                                 </div>
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin size={12} className="flex-shrink-0" style={{ color: "#4ade80" }} />
-                                    <span className="font-mono" style={{ color: "#4ade80" }}>
-                                        {v.latitude}, {v.longitude}
-                                    </span>
+                                <div className="flex items-center gap-1.5 font-mono text-green-400">
+                                    <Navigation size={12} className="flex-shrink-0" />
+                                    {v.latitude}, {v.longitude}
                                 </div>
-                                <div className="flex items-center gap-1.5">
-                                    <UserCheck size={12} className="flex-shrink-0" />
-                                    {v.clientManager}
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <Clock size={12} className="flex-shrink-0" />
-                                    {formatDate(v.timestamp)}
+                                <div className="flex flex-col gap-1 mt-2">
+                                    <div className="flex items-center gap-1.5 text-slate-300 font-medium pt-2 border-t border-slate-700/50">
+                                        <UserCheck size={12} className="flex-shrink-0" />
+                                        {v.clientManager}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-slate-400">
+                                        <Phone size={12} className="flex-shrink-0" />
+                                        {v.clientPhone || "No phone provided"}
+                                    </div>
                                 </div>
                             </div>
+
+                            {/* Rooms List Mobile */}
+                            {v.rooms && v.rooms.length > 0 && (
+                                <div className="pt-2 border-t border-slate-700/50">
+                                    <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Window Measurements</div>
+                                    <div className="space-y-1">
+                                        {v.rooms.map((r, rIdx) => {
+                                            const area = parseFloat(r.width) * parseFloat(r.height);
+                                            return (
+                                                <div key={rIdx} className="flex items-center justify-between text-xs bg-slate-800/50 px-2 py-1.5 rounded">
+                                                    <span className="text-slate-300">{r.roomName}</span>
+                                                    <span className="font-mono text-indigo-400 text-[10px]">{area.toFixed(1)} m²</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     );
                 })}
