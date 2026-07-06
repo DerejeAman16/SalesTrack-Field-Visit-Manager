@@ -30,7 +30,7 @@ export default function RoomMeasurements({ rooms, setRooms }) {
     return (
         <div className="space-y-3">
             <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-slate-400">Room Window Measurements</label>
+                <label className="text-xs font-medium text-slate-400">Measurements</label>
                 <button
                     type="button"
                     onClick={handleAdd}
