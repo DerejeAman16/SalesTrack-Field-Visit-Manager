@@ -5,21 +5,20 @@ import { useAuth } from "@/lib/auth";
 
 export default function SalespersonList() {
     const { usersList, user: currentUser } = useAuth();
-    // Exclude the current admin if desired, but good to see everyone.
     const agents = usersList.filter(u => u.role !== "admin");
 
     return (
         <section
-            className="rounded-2xl p-6 h-full flex flex-col"
+            className="rounded-2xl p-6 h-full flex flex-col transition-colors duration-250"
             style={{
-                background: "linear-gradient(145deg, #1e293b, #0f172a)",
-                border: "1px solid #334155",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
+                background: "var(--card-gradient)",
+                border: "1px solid var(--border-color)",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
             }}
         >
             <div className="flex items-center gap-2 mb-4">
                 <Users size={18} style={{ color: "#10b981" }} />
-                <h2 className="text-base font-semibold" style={{ color: "#e2e8f0" }}>
+                <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
                     Registered Salespeople
                 </h2>
                 <div
@@ -35,7 +34,10 @@ export default function SalespersonList() {
                     <div
                         key={i}
                         className="flex items-center gap-3 p-2.5 rounded-xl transition-colors"
-                        style={{ background: "#0a1628", border: "1px solid #1e293b" }}
+                        style={{
+                            background: "var(--bg-secondary)",
+                            border: "1px solid var(--border-subtle)",
+                        }}
                     >
                         <div
                             className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white text-xs flex-shrink-0"
@@ -44,17 +46,17 @@ export default function SalespersonList() {
                             {agent.name.charAt(0)}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">{agent.name}</p>
-                            <p className="text-[10px] text-slate-400 font-mono truncate">@{agent.username}</p>
+                            <p className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{agent.name}</p>
+                            <p className="text-[10px] font-mono truncate" style={{ color: "var(--text-muted)" }}>@{agent.username}</p>
                         </div>
-                        <div className="flex-shrink-0 text-slate-500">
+                        <div className="flex-shrink-0" style={{ color: "var(--text-muted)" }}>
                             {agent.role === "admin" ? <Shield size={14} /> : <User size={14} />}
                         </div>
                     </div>
                 ))}
 
                 {agents.length === 0 && (
-                    <div className="text-xs text-center text-slate-500 py-4">
+                    <div className="text-xs text-center py-4" style={{ color: "var(--text-muted)" }}>
                         No salespeople registered yet.
                     </div>
                 )}

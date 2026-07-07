@@ -14,14 +14,10 @@ const MOCK_LOCATIONS = [
 ];
 
 const inputClass = `
-  w-full px-4 py-2.5 rounded-xl text-sm text-white
+  w-full px-4 py-2.5 rounded-xl text-sm
   focus:outline-none focus:ring-2 focus:ring-indigo-500
-  transition-all duration-200 placeholder:text-slate-500
+  transition-all duration-200
 `;
-const inputStyle = {
-    background: "#0f172a",
-    border: "1px solid #334155",
-};
 
 export default function VisitForm({ onSubmit }) {
     const { user } = useAuth();
@@ -124,11 +120,11 @@ export default function VisitForm({ onSubmit }) {
 
     return (
         <section
-            className="rounded-2xl p-6"
+            className="rounded-2xl p-6 transition-colors duration-250"
             style={{
-                background: "linear-gradient(145deg, #1e293b, #0f172a)",
-                border: "1px solid #334155",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
+                background: "var(--card-gradient)",
+                border: "1px solid var(--border-color)",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
             }}
         >
             {/* Header */}
@@ -140,8 +136,8 @@ export default function VisitForm({ onSubmit }) {
                     <CheckCircle2 size={18} className="text-white" />
                 </div>
                 <div>
-                    <h2 className="font-semibold text-white">Log a Visit</h2>
-                    <p className="text-xs" style={{ color: "#64748b" }}>
+                    <h2 className="font-semibold" style={{ color: "var(--text-primary)" }}>Log a Visit</h2>
+                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>
                         Submit a new site check-in
                     </p>
                 </div>
@@ -156,7 +152,7 @@ export default function VisitForm({ onSubmit }) {
                     <p className="font-semibold" style={{ color: "#4ade80" }}>
                         Visit Logged Successfully!
                     </p>
-                    <p className="text-sm" style={{ color: "#94a3b8" }}>
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
                         Data has been pushed to the dashboard.
                     </p>
                 </div>
@@ -164,7 +160,7 @@ export default function VisitForm({ onSubmit }) {
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Pin Location */}
                     <div>
-                        <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
+                        <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
                             <MapPin size={12} /> Site Location
                         </label>
                         <button
@@ -174,10 +170,10 @@ export default function VisitForm({ onSubmit }) {
                             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-95 mb-2"
                             style={{
                                 background: locating
-                                    ? "#1e293b"
+                                    ? "var(--bg-secondary)"
                                     : "linear-gradient(135deg, #1d4ed8, #6366f1)",
                                 border: "1px solid #3b82f655",
-                                color: locating ? "#64748b" : "white",
+                                color: locating ? "var(--text-muted)" : "white",
                                 cursor: locating ? "not-allowed" : "pointer",
                             }}
                         >
@@ -212,7 +208,11 @@ export default function VisitForm({ onSubmit }) {
                             onChange={handleChange}
                             placeholder="Site address (e.g. Bole Sub-City, Woreda 03…)"
                             className={inputClass}
-                            style={inputStyle}
+                            style={{
+                                background: "var(--bg-input)",
+                                border: "1px solid var(--border-color)",
+                                color: "var(--text-primary)",
+                            }}
                         />
                         {errors.address && (
                             <p className="text-xs mt-1" style={{ color: "#f87171" }}>
@@ -224,7 +224,7 @@ export default function VisitForm({ onSubmit }) {
                     {/* Client Information */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
+                            <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
                                 <UserCheck size={12} /> Client Manager Name
                             </label>
                             <input
@@ -233,7 +233,11 @@ export default function VisitForm({ onSubmit }) {
                                 onChange={handleChange}
                                 placeholder="e.g. Ato Tesfaye Kebede"
                                 className={inputClass}
-                                style={inputStyle}
+                                style={{
+                                    background: "var(--bg-input)",
+                                    border: "1px solid var(--border-color)",
+                                    color: "var(--text-primary)",
+                                }}
                             />
                             {errors.clientManager && (
                                 <p className="text-xs mt-1" style={{ color: "#f87171" }}>
@@ -242,7 +246,7 @@ export default function VisitForm({ onSubmit }) {
                             )}
                         </div>
                         <div>
-                            <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
+                            <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
                                 <Phone size={12} /> Phone Number
                             </label>
                             <input
@@ -252,7 +256,11 @@ export default function VisitForm({ onSubmit }) {
                                 onChange={handleChange}
                                 placeholder="e.g. 0911223344"
                                 className={inputClass}
-                                style={inputStyle}
+                                style={{
+                                    background: "var(--bg-input)",
+                                    border: "1px solid var(--border-color)",
+                                    color: "var(--text-primary)",
+                                }}
                             />
                             {errors.clientPhone && (
                                 <p className="text-xs mt-1" style={{ color: "#f87171" }}>
@@ -265,7 +273,7 @@ export default function VisitForm({ onSubmit }) {
                     {/* Visit Classification */}
                     <div className="space-y-4 pt-2">
                         <div>
-                            <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: "#94a3b8" }}>
+                            <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: "var(--text-secondary)" }}>
                                 Visit Nature
                             </label>
                             <div className="flex flex-wrap gap-3">
@@ -275,17 +283,17 @@ export default function VisitForm({ onSubmit }) {
                                             type="checkbox"
                                             checked={form.visitNature.includes(option)}
                                             onChange={() => handleCheckboxChange("visitNature", option)}
-                                            className="w-4 h-4 rounded border-slate-600 bg-slate-800"
+                                            className="w-4 h-4 rounded"
                                             style={{ accentColor: "#6366f1" }}
                                         />
-                                        <span className="text-sm text-slate-300">{option}</span>
+                                        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{option}</span>
                                     </label>
                                 ))}
                             </div>
                         </div>
 
                         <div>
-                            <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: "#94a3b8" }}>
+                            <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: "var(--text-secondary)" }}>
                                 Approached For
                             </label>
                             <div className="flex flex-wrap gap-3">
@@ -295,10 +303,10 @@ export default function VisitForm({ onSubmit }) {
                                             type="checkbox"
                                             checked={form.approachedFor.includes(option)}
                                             onChange={() => handleCheckboxChange("approachedFor", option)}
-                                            className="w-4 h-4 rounded border-slate-600 bg-slate-800"
+                                            className="w-4 h-4 rounded"
                                             style={{ accentColor: "#6366f1" }}
                                         />
-                                        <span className="text-sm text-slate-300">{option}</span>
+                                        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{option}</span>
                                     </label>
                                 ))}
                             </div>
@@ -306,7 +314,10 @@ export default function VisitForm({ onSubmit }) {
                     </div>
 
                     {/* Dynamic Room Measurements */}
-                    <div className="pt-2 border-t border-[#1e293b]">
+                    <div
+                        className="pt-2 border-t"
+                        style={{ borderColor: "var(--border-subtle)" }}
+                    >
                         <RoomMeasurements rooms={rooms} setRooms={setRooms} />
                         {errors.rooms && (
                             <p className="text-xs mt-2" style={{ color: "#f87171" }}>

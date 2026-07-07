@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
-:root {
+/* ── Dark theme (default) ───────────────────────────────── */
+:root,
+[data-theme="dark"] {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --bg-card: #1e293b;
+  --bg-card-alt: #0f172a;
+  --bg-input: #0f172a;
   --border-color: #334155;
+  --border-subtle: #1e293b;
   --accent: #6366f1;
   --accent-light: #818cf8;
   --success: #10b981;
@@ -12,6 +17,40 @@
   --danger: #ef4444;
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-faint: #475569;
+  --row-alt: #0a1628;
+  --row-expanded: #1e293b;
+  --header-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --card-gradient: linear-gradient(145deg, #1e293b, #0f172a);
+  --scrollbar-track: #1e293b;
+  --scrollbar-thumb: #475569;
+}
+
+/* ── Light theme ─────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --bg-card: #ffffff;
+  --bg-card-alt: #f8fafc;
+  --bg-input: #f8fafc;
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --row-alt: #f8fafc;
+  --row-expanded: #eff6ff;
+  --header-bg: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  --card-gradient: linear-gradient(145deg, #ffffff, #f8fafc);
+  --scrollbar-track: #e2e8f0;
+  --scrollbar-thumb: #94a3b8;
 }
 
 * {
@@ -23,6 +62,7 @@ body {
   color: var(--text-primary);
   font-family: "Inter", "Segoe UI", sans-serif;
   min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Smooth scrolling */
@@ -35,13 +75,16 @@ html {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: var(--scrollbar-track);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #475569;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }

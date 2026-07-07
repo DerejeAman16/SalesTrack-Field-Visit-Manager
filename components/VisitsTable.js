@@ -45,7 +45,7 @@ export default function VisitsTable({ visits }) {
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                     <TableProperties size={18} style={{ color: "#6366f1" }} />
-                    <h2 className="text-base font-semibold" style={{ color: "#e2e8f0" }}>
+                    <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
                         Visit Logs
                     </h2>
                 </div>
@@ -59,21 +59,25 @@ export default function VisitsTable({ visits }) {
 
             {/* Desktop Table */}
             <div
-                className="hidden md:block rounded-2xl overflow-hidden"
+                className="hidden md:block rounded-2xl overflow-hidden transition-colors duration-250"
                 style={{
-                    background: "linear-gradient(145deg, #1e293b, #0f172a)",
-                    border: "1px solid #334155",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
+                    background: "var(--card-gradient)",
+                    border: "1px solid var(--border-color)",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
                 }}
             >
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead>
-                            <tr style={{ borderBottom: "1px solid #1e293b" }}>
+                            <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                                 {["Timestamp", "Salesperson", "Location", "Client Manager", "Rooms"].map((h) => (
                                     <th
                                         key={h}
-                                        className="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-[#0f172a]"
+                                        className="text-left px-5 py-3 text-[11px] font-bold uppercase tracking-wider"
+                                        style={{
+                                            color: "var(--text-muted)",
+                                            background: "var(--bg-card-alt)",
+                                        }}
                                     >
                                         {h}
                                     </th>
@@ -92,12 +96,16 @@ export default function VisitsTable({ visits }) {
                                         className="transition-colors duration-150 cursor-pointer group"
                                         onClick={() => setExpandedRow(isExpanded ? null : v.id)}
                                         style={{
-                                            borderBottom: "1px solid #1e293b",
-                                            background: isExpanded ? "#1e293b" : i % 2 === 0 ? "transparent" : "#0a1628",
+                                            borderBottom: "1px solid var(--border-subtle)",
+                                            background: isExpanded
+                                                ? "var(--row-expanded)"
+                                                : i % 2 === 0
+                                                    ? "transparent"
+                                                    : "var(--row-alt)",
                                         }}
                                     >
                                         <td className="px-5 py-4 whitespace-nowrap align-top">
-                                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                                            <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--text-secondary)" }}>
                                                 <Clock size={12} />
                                                 {formatDate(v.timestamp)}
                                             </div>
@@ -110,23 +118,23 @@ export default function VisitsTable({ visits }) {
                                                 >
                                                     {v.salesperson.charAt(0)}
                                                 </div>
-                                                <span className="font-medium text-white text-xs">{v.salesperson}</span>
+                                                <span className="font-medium text-xs" style={{ color: "var(--text-primary)" }}>{v.salesperson}</span>
                                             </div>
                                         </td>
                                         <td className="px-5 py-4 align-top">
                                             <div className="max-w-[200px]">
-                                                <p className="text-xs text-white leading-snug truncate">{v.address}</p>
+                                                <p className="text-xs leading-snug truncate" style={{ color: "var(--text-primary)" }}>{v.address}</p>
                                                 <p className="text-[10px] font-mono mt-1 text-green-400">
                                                     {v.latitude}, {v.longitude}
                                                 </p>
                                             </div>
                                         </td>
                                         <td className="px-5 py-4 align-top">
-                                            <div className="text-xs text-slate-300 font-medium">
+                                            <div className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
                                                 {v.clientManager}
                                             </div>
                                             {(v.clientPhone || v.clientPhone === "") && (
-                                                <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-500">
+                                                <div className="flex items-center gap-1 mt-1 text-[10px]" style={{ color: "var(--text-muted)" }}>
                                                     <Phone size={10} />
                                                     {v.clientPhone || "No Phone"}
                                                 </div>
@@ -134,21 +142,24 @@ export default function VisitsTable({ visits }) {
                                         </td>
                                         <td className="px-5 py-4 align-top">
                                             {!v.rooms || v.rooms.length === 0 ? (
-                                                <span className="text-xs text-slate-500">No rooms</span>
+                                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>No rooms</span>
                                             ) : (
                                                 <div className="space-y-1.5">
                                                     <div className="flex items-center gap-2">
                                                         <Badge color="#10b981">{totalArea.toFixed(1)} m²</Badge>
-                                                        <span className="text-[10px] text-slate-400">{v.rooms.length} room(s)</span>
+                                                        <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>{v.rooms.length} room(s)</span>
                                                     </div>
 
                                                     {isExpanded && (
-                                                        <div className="mt-4 space-y-3 pt-3 border-t border-slate-700/50">
+                                                        <div
+                                                            className="mt-4 space-y-3 pt-3 border-t"
+                                                            style={{ borderColor: "var(--border-color)" }}
+                                                        >
                                                             {(v.visitNature?.length > 0 || v.approachedFor?.length > 0) && (
                                                                 <div className="grid grid-cols-1 gap-2">
                                                                     {v.visitNature?.length > 0 && (
                                                                         <div>
-                                                                            <span className="text-slate-500 font-semibold uppercase tracking-widest text-[9px] block mb-1">Visit Nature</span>
+                                                                            <span className="font-semibold uppercase tracking-widest text-[9px] block mb-1" style={{ color: "var(--text-muted)" }}>Visit Nature</span>
                                                                             <div className="flex flex-wrap gap-1">
                                                                                 {v.visitNature.map(n => <Badge key={n} color="#3b82f6">{n}</Badge>)}
                                                                             </div>
@@ -156,7 +167,7 @@ export default function VisitsTable({ visits }) {
                                                                     )}
                                                                     {v.approachedFor?.length > 0 && (
                                                                         <div>
-                                                                            <span className="text-slate-500 font-semibold uppercase tracking-widest text-[9px] block mb-1">Approached For</span>
+                                                                            <span className="font-semibold uppercase tracking-widest text-[9px] block mb-1" style={{ color: "var(--text-muted)" }}>Approached For</span>
                                                                             <div className="flex flex-wrap gap-1">
                                                                                 {v.approachedFor.map(a => <Badge key={a} color="#ec4899">{a}</Badge>)}
                                                                             </div>
@@ -165,14 +176,20 @@ export default function VisitsTable({ visits }) {
                                                                 </div>
                                                             )}
                                                             <div>
-                                                                <span className="text-slate-500 font-semibold uppercase tracking-widest text-[9px] block mb-1">Rooms</span>
+                                                                <span className="font-semibold uppercase tracking-widest text-[9px] block mb-1" style={{ color: "var(--text-muted)" }}>Rooms</span>
                                                                 <div className="space-y-1 text-xs">
                                                                     {v.rooms.map((r, rIdx) => {
                                                                         const area = parseFloat(r.width) * parseFloat(r.height);
                                                                         return (
-                                                                            <div key={rIdx} className="flex items-center justify-between py-1 border-t border-slate-700/50">
-                                                                                <span className="text-slate-300">{r.roomName}</span>
-                                                                                <span className="font-mono text-slate-400 text-[10px]">{r.width} × {r.height} &nbsp;<span className="text-indigo-400">({area.toFixed(1)}m²)</span></span>
+                                                                            <div
+                                                                                key={rIdx}
+                                                                                className="flex items-center justify-between py-1 border-t"
+                                                                                style={{ borderColor: "var(--border-color)" }}
+                                                                            >
+                                                                                <span style={{ color: "var(--text-secondary)" }}>{r.roomName}</span>
+                                                                                <span className="font-mono text-[10px]" style={{ color: "var(--text-muted)" }}>
+                                                                                    {r.width} × {r.height} &nbsp;<span className="text-indigo-400">({area.toFixed(1)}m²)</span>
+                                                                                </span>
                                                                             </div>
                                                                         );
                                                                     })}
@@ -200,10 +217,10 @@ export default function VisitsTable({ visits }) {
                     return (
                         <div
                             key={v.id}
-                            className="rounded-2xl p-4 space-y-3"
+                            className="rounded-2xl p-4 space-y-3 transition-colors duration-250"
                             style={{
-                                background: "linear-gradient(145deg, #1e293b, #0f172a)",
-                                border: "1px solid #334155",
+                                background: "var(--card-gradient)",
+                                border: "1px solid var(--border-color)",
                             }}
                         >
                             {/* Top row */}
@@ -215,16 +232,16 @@ export default function VisitsTable({ visits }) {
                                     >
                                         {v.salesperson.charAt(0)}
                                     </div>
-                                    <span className="text-sm font-semibold text-white">{v.salesperson}</span>
+                                    <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{v.salesperson}</span>
                                 </div>
                                 <div className="flex flex-col items-end gap-1">
-                                    <span className="text-[10px] text-slate-400">{formatDate(v.timestamp)}</span>
+                                    <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{formatDate(v.timestamp)}</span>
                                     <Badge color="#10b981">{totalArea.toFixed(1)} m²</Badge>
                                 </div>
                             </div>
 
                             {/* Details */}
-                            <div className="space-y-2 text-xs" style={{ color: "#94a3b8" }}>
+                            <div className="space-y-2 text-xs" style={{ color: "var(--text-secondary)" }}>
                                 <div className="flex items-start gap-1.5">
                                     <MapPin size={12} className="mt-0.5 flex-shrink-0" style={{ color: "#6366f1" }} />
                                     <span>{v.address}</span>
@@ -234,11 +251,14 @@ export default function VisitsTable({ visits }) {
                                     {v.latitude}, {v.longitude}
                                 </div>
                                 <div className="flex flex-col gap-1 mt-2">
-                                    <div className="flex items-center gap-1.5 text-slate-300 font-medium pt-2 border-t border-slate-700/50">
+                                    <div
+                                        className="flex items-center gap-1.5 font-medium pt-2 border-t"
+                                        style={{ color: "var(--text-secondary)", borderColor: "var(--border-color)" }}
+                                    >
                                         <UserCheck size={12} className="flex-shrink-0" />
                                         {v.clientManager}
                                     </div>
-                                    <div className="flex items-center gap-1.5 text-slate-400">
+                                    <div className="flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
                                         <Phone size={12} className="flex-shrink-0" />
                                         {v.clientPhone || "No phone provided"}
                                     </div>
@@ -247,10 +267,10 @@ export default function VisitsTable({ visits }) {
 
                             {/* Classification Mobile */}
                             {(v.visitNature?.length > 0 || v.approachedFor?.length > 0) && (
-                                <div className="pt-2 border-t border-slate-700/50">
+                                <div className="pt-2 border-t" style={{ borderColor: "var(--border-color)" }}>
                                     {v.visitNature?.length > 0 && (
                                         <div className="mb-2">
-                                            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Visit Nature</div>
+                                            <div className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: "var(--text-muted)" }}>Visit Nature</div>
                                             <div className="flex flex-wrap gap-1">
                                                 {v.visitNature.map(n => <Badge key={n} color="#3b82f6">{n}</Badge>)}
                                             </div>
@@ -258,7 +278,7 @@ export default function VisitsTable({ visits }) {
                                     )}
                                     {v.approachedFor?.length > 0 && (
                                         <div>
-                                            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Approached For</div>
+                                            <div className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: "var(--text-muted)" }}>Approached For</div>
                                             <div className="flex flex-wrap gap-1">
                                                 {v.approachedFor.map(a => <Badge key={a} color="#ec4899">{a}</Badge>)}
                                             </div>
@@ -269,14 +289,18 @@ export default function VisitsTable({ visits }) {
 
                             {/* Rooms List Mobile */}
                             {v.rooms && v.rooms.length > 0 && (
-                                <div className="pt-2 border-t border-slate-700/50">
-                                    <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Window Measurements</div>
+                                <div className="pt-2 border-t" style={{ borderColor: "var(--border-color)" }}>
+                                    <div className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: "var(--text-muted)" }}>Window Measurements</div>
                                     <div className="space-y-1">
                                         {v.rooms.map((r, rIdx) => {
                                             const area = parseFloat(r.width) * parseFloat(r.height);
                                             return (
-                                                <div key={rIdx} className="flex items-center justify-between text-xs bg-slate-800/50 px-2 py-1.5 rounded">
-                                                    <span className="text-slate-300">{r.roomName}</span>
+                                                <div
+                                                    key={rIdx}
+                                                    className="flex items-center justify-between text-xs px-2 py-1.5 rounded"
+                                                    style={{ background: "var(--bg-secondary)" }}
+                                                >
+                                                    <span style={{ color: "var(--text-secondary)" }}>{r.roomName}</span>
                                                     <span className="font-mono text-indigo-400 text-[10px]">{area.toFixed(1)} m²</span>
                                                 </div>
                                             );

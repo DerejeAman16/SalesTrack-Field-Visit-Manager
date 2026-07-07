@@ -24,7 +24,7 @@ export default function AdminDashboard() {
     if (!user || user.role !== "admin") return null;
 
     return (
-        <div className="min-h-screen" style={{ background: "#0f172a" }}>
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
             <Header />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
                     >
                         Admin Dashboard
                     </h2>
-                    <p className="text-sm mt-1" style={{ color: "#475569" }}>
+                    <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
                         Overview of field visits and team management.
                     </p>
                 </div>
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
 
             <footer
                 className="mt-8 py-5 text-center text-xs"
-                style={{ color: "#334155", borderTop: "1px solid #1e293b" }}
+                style={{ color: "var(--text-muted)", borderTop: "1px solid var(--border-subtle)" }}
             >
                 SalesTrack &copy; {new Date().getFullYear()} &mdash; Admin Dashboard
             </footer>

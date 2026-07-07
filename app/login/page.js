@@ -31,13 +31,16 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#0f172a" }}>
+        <div
+            className="min-h-screen flex items-center justify-center px-4 transition-colors duration-250"
+            style={{ background: "var(--bg-primary)" }}
+        >
             <div
                 className="w-full max-w-md p-8 rounded-2xl relative overflow-hidden"
                 style={{
-                    background: "linear-gradient(145deg, #1e293b, #0f172a)",
-                    border: "1px solid #334155",
-                    boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+                    background: "var(--card-gradient)",
+                    border: "1px solid var(--border-color)",
+                    boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
                 }}
             >
                 {/* Glow accent */}
@@ -53,8 +56,8 @@ export default function LoginPage() {
                     >
                         <MapPin size={28} className="text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-1">SalesTrack</h1>
-                    <p className="text-sm" style={{ color: "#94a3b8" }}>
+                    <h1 className="text-2xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>SalesTrack</h1>
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
                         Sign in to your account
                     </p>
                 </div>
@@ -68,11 +71,11 @@ export default function LoginPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-5 relative">
                     <div>
-                        <label className="block text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
+                        <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
                             Username
                         </label>
                         <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#64748b" }}>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }}>
                                 <User size={16} />
                             </span>
                             <input
@@ -81,18 +84,22 @@ export default function LoginPage() {
                                 value={form.username}
                                 onChange={handleChange}
                                 placeholder="Enter your username"
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-500"
-                                style={{ background: "#0a1628", border: "1px solid #334155" }}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                style={{
+                                    background: "var(--bg-input)",
+                                    border: "1px solid var(--border-color)",
+                                    color: "var(--text-primary)",
+                                }}
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium mb-1.5" style={{ color: "#94a3b8" }}>
+                        <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
                             Password
                         </label>
                         <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#64748b" }}>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }}>
                                 <Lock size={16} />
                             </span>
                             <input
@@ -101,8 +108,12 @@ export default function LoginPage() {
                                 value={form.password}
                                 onChange={handleChange}
                                 placeholder="Enter your password"
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-500"
-                                style={{ background: "#0a1628", border: "1px solid #334155" }}
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                style={{
+                                    background: "var(--bg-input)",
+                                    border: "1px solid var(--border-color)",
+                                    color: "var(--text-primary)",
+                                }}
                             />
                         </div>
                     </div>
@@ -118,7 +129,7 @@ export default function LoginPage() {
                         Sign In
                     </button>
 
-                    <div className="text-center pt-4 text-xs" style={{ color: "#64748b" }}>
+                    <div className="text-center pt-4 text-xs" style={{ color: "var(--text-muted)" }}>
                         <p>Demo accounts:</p>
                         <p className="mt-1">Admin: admin / 123 | Agent: abebe / 123</p>
                     </div>

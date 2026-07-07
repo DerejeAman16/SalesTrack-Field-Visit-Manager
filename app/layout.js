@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
+import { ThemeProvider } from "@/lib/theme";
 
 export const metadata = {
     title: "Field Sales Visit Tracker",
@@ -8,7 +9,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" data-scroll-behavior="smooth">
+        <html lang="en" data-theme="dark">
             <head>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -18,7 +19,9 @@ export default function RootLayout({ children }) {
                 />
             </head>
             <body className="antialiased" suppressHydrationWarning>
-                <AuthProvider>{children}</AuthProvider>
+                <ThemeProvider>
+                    <AuthProvider>{children}</AuthProvider>
+                </ThemeProvider>
             </body>
         </html>
     );

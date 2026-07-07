@@ -7,9 +7,9 @@ function KpiCard({ icon: Icon, label, value, sub, color, gradient }) {
         <div
             className="relative overflow-hidden rounded-2xl p-5 group transition-all duration-300 hover:-translate-y-1"
             style={{
-                background: "linear-gradient(145deg, #1e293b, #0f172a)",
-                border: "1px solid #334155",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
+                background: "var(--card-gradient)",
+                border: "1px solid var(--border-color)",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
             }}
         >
             {/* Glow blob */}
@@ -20,7 +20,7 @@ function KpiCard({ icon: Icon, label, value, sub, color, gradient }) {
 
             <div className="relative flex items-start justify-between">
                 <div>
-                    <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "#64748b" }}>
+                    <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
                         {label}
                     </p>
                     <p
@@ -30,7 +30,7 @@ function KpiCard({ icon: Icon, label, value, sub, color, gradient }) {
                         {value}
                     </p>
                     {sub && (
-                        <p className="mt-1 text-xs" style={{ color: "#94a3b8" }}>
+                        <p className="mt-1 text-xs" style={{ color: "var(--text-secondary)" }}>
                             {sub}
                         </p>
                     )}
@@ -78,7 +78,7 @@ export default function StatsCards({ visits }) {
         <section>
             <div className="flex items-center gap-2 mb-4">
                 <TrendingUp size={18} style={{ color: "#6366f1" }} />
-                <h2 className="text-base font-semibold" style={{ color: "#e2e8f0" }}>
+                <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
                     Performance Overview
                 </h2>
             </div>

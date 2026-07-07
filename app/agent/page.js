@@ -29,7 +29,7 @@ export default function AgentDashboard() {
     };
 
     return (
-        <div className="min-h-screen" style={{ background: "#0f172a" }}>
+        <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
             <Header />
 
             <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
@@ -44,22 +44,22 @@ export default function AgentDashboard() {
                     >
                         Welcome, {user.name}
                     </h2>
-                    <p className="text-sm mt-1" style={{ color: "#475569" }}>
+                    <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
                         Log your field visits and measurements here.
                     </p>
                 </div>
 
                 <VisitForm onSubmit={handleNewVisit} />
 
-                <div className="pt-4 border-t border-slate-800">
-                    <h3 className="text-xl font-bold text-white mb-4">Your Recent Visits</h3>
+                <div className="pt-4 border-t" style={{ borderColor: "var(--border-color)" }}>
+                    <h3 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Your Recent Visits</h3>
                     <VisitsTable visits={agentVisits} />
                 </div>
             </main>
 
             <footer
                 className="mt-8 py-5 text-center text-xs"
-                style={{ color: "#334155", borderTop: "1px solid #1e293b" }}
+                style={{ color: "var(--text-muted)", borderTop: "1px solid var(--border-subtle)" }}
             >
                 SalesTrack &copy; {new Date().getFullYear()} &mdash; Field Sales Visit Tracker
             </footer>
