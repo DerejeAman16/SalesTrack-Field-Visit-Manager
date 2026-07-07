@@ -37,7 +37,7 @@ export default function RoomMeasurements({ rooms, setRooms }) {
                     className="flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg text-indigo-400 hover:bg-indigo-500/10 transition-colors"
                     style={{ border: "1px solid #6366f144" }}
                 >
-                    <Plus size={14} /> Add Room
+                    <Plus size={14} /> Add Measurement
                 </button>
             </div>
 
