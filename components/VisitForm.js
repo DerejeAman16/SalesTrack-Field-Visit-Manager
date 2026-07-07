@@ -31,6 +31,8 @@ export default function VisitForm({ onSubmit }) {
         longitude: "",
         clientManager: "",
         clientPhone: "",
+        visitNature: [],
+        approachedFor: [],
     });
     const [rooms, setRooms] = useState([]);
     const [locating, setLocating] = useState(false);
@@ -41,6 +43,21 @@ export default function VisitForm({ onSubmit }) {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         if (errors[e.target.name]) {
             setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
+        }
+    };
+
+    const handleCheckboxChange = (field, value) => {
+        setForm((prev) => {
+            const list = [...prev[field]];
+            if (list.includes(value)) {
+                return { ...prev, [field]: list.filter((item) => item !== value) };
+            } else {
+                list.push(value);
+                return { ...prev, [field]: list };
+            }
+        });
+        if (errors[field]) {
+            setErrors((prev) => ({ ...prev, [field]: "" }));
         }
     };
 
@@ -91,12 +108,14 @@ export default function VisitForm({ onSubmit }) {
             longitude: form.longitude,
             clientManager: form.clientManager,
             clientPhone: form.clientPhone,
+            visitNature: form.visitNature,
+            approachedFor: form.approachedFor,
             rooms: rooms.map(r => ({ roomName: r.roomName, width: Number(r.width), height: Number(r.height) })),
         });
 
         setSubmitted(true);
         setTimeout(() => {
-            setForm({ address: "", latitude: "", longitude: "", clientManager: "", clientPhone: "" });
+            setForm({ address: "", latitude: "", longitude: "", clientManager: "", clientPhone: "", visitNature: [], approachedFor: [] });
             setRooms([]);
             setErrors({});
             setSubmitted(false);
@@ -240,6 +259,49 @@ export default function VisitForm({ onSubmit }) {
                                     {errors.clientPhone}
                                 </p>
                             )}
+                        </div>
+                    </div>
+
+                    {/* Visit Classification */}
+                    <div className="space-y-4 pt-2">
+                        <div>
+                            <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: "#94a3b8" }}>
+                                Visit Nature
+                            </label>
+                            <div className="flex flex-wrap gap-3">
+                                {["New Prospect", "Followup", "Upselling"].map((option) => (
+                                    <label key={option} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={form.visitNature.includes(option)}
+                                            onChange={() => handleCheckboxChange("visitNature", option)}
+                                            className="w-4 h-4 rounded border-slate-600 bg-slate-800"
+                                            style={{ accentColor: "#6366f1" }}
+                                        />
+                                        <span className="text-sm text-slate-300">{option}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: "#94a3b8" }}>
+                                Approached For
+                            </label>
+                            <div className="flex flex-wrap gap-3">
+                                {["Aluminium", "Cabinetry", "Furniture", "Sourcing"].map((option) => (
+                                    <label key={option} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={form.approachedFor.includes(option)}
+                                            onChange={() => handleCheckboxChange("approachedFor", option)}
+                                            className="w-4 h-4 rounded border-slate-600 bg-slate-800"
+                                            style={{ accentColor: "#6366f1" }}
+                                        />
+                                        <span className="text-sm text-slate-300">{option}</span>
+                                    </label>
+                                ))}
+                            </div>
                         </div>
                     </div>
 

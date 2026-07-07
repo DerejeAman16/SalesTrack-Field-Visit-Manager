@@ -143,16 +143,41 @@ export default function VisitsTable({ visits }) {
                                                     </div>
 
                                                     {isExpanded && (
-                                                        <div className="mt-3 space-y-1 text-xs">
-                                                            {v.rooms.map((r, rIdx) => {
-                                                                const area = parseFloat(r.width) * parseFloat(r.height);
-                                                                return (
-                                                                    <div key={rIdx} className="flex items-center justify-between py-1 border-t border-slate-700/50">
-                                                                        <span className="text-slate-300">{r.roomName}</span>
-                                                                        <span className="font-mono text-slate-400 text-[10px]">{r.width} × {r.height} &nbsp;<span className="text-indigo-400">({area.toFixed(1)}m²)</span></span>
-                                                                    </div>
-                                                                );
-                                                            })}
+                                                        <div className="mt-4 space-y-3 pt-3 border-t border-slate-700/50">
+                                                            {(v.visitNature?.length > 0 || v.approachedFor?.length > 0) && (
+                                                                <div className="grid grid-cols-1 gap-2">
+                                                                    {v.visitNature?.length > 0 && (
+                                                                        <div>
+                                                                            <span className="text-slate-500 font-semibold uppercase tracking-widest text-[9px] block mb-1">Visit Nature</span>
+                                                                            <div className="flex flex-wrap gap-1">
+                                                                                {v.visitNature.map(n => <Badge key={n} color="#3b82f6">{n}</Badge>)}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                    {v.approachedFor?.length > 0 && (
+                                                                        <div>
+                                                                            <span className="text-slate-500 font-semibold uppercase tracking-widest text-[9px] block mb-1">Approached For</span>
+                                                                            <div className="flex flex-wrap gap-1">
+                                                                                {v.approachedFor.map(a => <Badge key={a} color="#ec4899">{a}</Badge>)}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                            <div>
+                                                                <span className="text-slate-500 font-semibold uppercase tracking-widest text-[9px] block mb-1">Rooms</span>
+                                                                <div className="space-y-1 text-xs">
+                                                                    {v.rooms.map((r, rIdx) => {
+                                                                        const area = parseFloat(r.width) * parseFloat(r.height);
+                                                                        return (
+                                                                            <div key={rIdx} className="flex items-center justify-between py-1 border-t border-slate-700/50">
+                                                                                <span className="text-slate-300">{r.roomName}</span>
+                                                                                <span className="font-mono text-slate-400 text-[10px]">{r.width} × {r.height} &nbsp;<span className="text-indigo-400">({area.toFixed(1)}m²)</span></span>
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>
@@ -219,6 +244,28 @@ export default function VisitsTable({ visits }) {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Classification Mobile */}
+                            {(v.visitNature?.length > 0 || v.approachedFor?.length > 0) && (
+                                <div className="pt-2 border-t border-slate-700/50">
+                                    {v.visitNature?.length > 0 && (
+                                        <div className="mb-2">
+                                            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Visit Nature</div>
+                                            <div className="flex flex-wrap gap-1">
+                                                {v.visitNature.map(n => <Badge key={n} color="#3b82f6">{n}</Badge>)}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {v.approachedFor?.length > 0 && (
+                                        <div>
+                                            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Approached For</div>
+                                            <div className="flex flex-wrap gap-1">
+                                                {v.approachedFor.map(a => <Badge key={a} color="#ec4899">{a}</Badge>)}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
 
                             {/* Rooms List Mobile */}
                             {v.rooms && v.rooms.length > 0 && (
